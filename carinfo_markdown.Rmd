@@ -1,0 +1,247 @@
+---
+title: "Automotive Trends From the Early 21st Century"
+author: "Marco Antonio de Oliveira Zambeli"
+date: "12/16/2020"
+output: pdf_document
+toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, echo=FALSE, include=FALSE, warning=FALSE}
+#Installing IF necessary packages
+#Package and dataset download 
+if(!require(tidyverse)) install.packages("tidyverse", repos = "http://cran.us.r-project.org")
+if(!require(RCurl)) install.packages("RCurl", repos = "http://cran.us.r-project.org")
+
+#Loading critical packages
+library(tidyverse)
+library(caret)
+library(data.table)
+
+#Download Dataset----
+
+url<- getURL("https://raw.githubusercontent.com/Marcozambeli/Harvard-Data-Science-Capstone/master/AutoCosts")
+carinfo<- read.csv(text = url)
+carinfo<-carinfo %>% drop_na() #drop all NAs
+
+```
+
+
+
+# 1. Introduction
+## 1.1 Historical Motivation
+
+Since the invention of the automobile during the late 18th century, several changes have taken place since the first American original design by Oliver Evans in 1789. Such changes over the past 230 years have been driven by both the demands of the consumer market and the need for industry that use automobile fleets to dispose of their production goods.
+
+With the popularization of the automobile at the end of the 20th century, the process of adapting automotive projects according to the demands of the consumer market became even more dynamic. Thanks to this, the automakers were driven even further to develop new technologies to add even more value to their products.
+
+Today there is a great deal of concern with regard to all aspects of a car. Especially in relation to safety, autonomy, performance, energy matrix and emission of pollutants. With the huge variety of brands and models on the market, consumers can easily choose the car that will best suit them, even if they are a very demanding customer. Today there is a huge variety of body styles, such as SUVs, sedans, wagons, minivans, pickups, each having a type of engine (be it combustion or electric) and a type of transmission coupled with a certain traction of the wheels. Such continuous innovations motivate the realization of this report.
+
+## 1.2 Analysis Proposal
+
+In order to better observe the different automotive standards of recent years, this report will analyze the "carinfo" dataset. In this set you will find information related to a series of topics that interest the automotive market, as an example you can see a sample of the variables and data present in this dataset: 
+
+```{r , echo=FALSE}
+names(carinfo)
+```
+
+And the data example, composed by the first 6 rows:
+
+```{r , echo=FALSE}
+head(carinfo)
+```
+
+the set analyzes data on cars built between the years of:
+
+```{r , echo=TRUE}
+min(carinfo$Year)
+max(carinfo$Year)
+```
+
+The number of models analyzed is:
+
+```{r , echo=FALSE}
+nrow(carinfo)
+```
+
+General dataset information:
+
+```{r , echo=FALSE}
+summary(carinfo)
+```
+To perform this work, some computational methods were used, such as survey of questions, data collection, data processing and organization, data analysis, development of models and algorithms, data visualization and decision making.
+
+# 2. Analysis
+
+## 2.1 Power / year
+
+The automotive engine was one of the most ingenious inventions in human history. Over the years, this strategic machine has undergone several changes and improvements.
+The advancement of mechanics and electronics in recent decades has resulted in achievements such as reducing engine capacity and increasing engine power, performance and torque. These innovations made possible the development of incredible engines, such as, for example, the three-cylinder version used in the Volkswagen Up !, which yields 82 hp.
+
+Another recent technology implemented in Otto cycle engines was the combination of direct and indirect fuel injection, a technique that Audi has been using in some projects, such as the 1.8 and 2.0 engines of the Audi A3. In this configuration, the indirect injection works at low and medium speeds, while the direct injection goes into operation at high speeds.
+
+The first relationship to be analyzed will be the relationship between the power of automobiles over the years. In the graph below, the variables "Year" and "Engine.HP" were selected, as well as the respective power histogram.
+
+### figures 1 and 2
+```{r , echo=FALSE}
+ggplot(data = carinfo, aes(x = Year, y = Engine.HP)) + 
+  geom_point(color='black') +
+  geom_smooth(method = "lm", se = TRUE)
+
+hist(carinfo$Engine.HP, freq=TRUE, col="black", border="white", 
+     main="Horse Power", xlab="hp", ylab="Units")
+```
+
+## 2.2 Analysing Downsizing through the years
+
+ All of us heard from someone that the automotive industry has ignored the pleasure of driving. Increasingly focused on pleasing the environment, it develops technologies that take the emotion out of driving. Hybrid cars, 100% electric and with autonomous steering are appearing in all automakers. Those who drive for pleasure have fewer and fewer options, and those that exist are - for the most part - very expensive.
+ 
+What we have as mainstream in the most accessible levels of the market today is the famous “downsizing”, a solution used by almost all automakers. And it came a long time after it was proven that small engines consume and pollute less than large engines in normal use situations, such as in traffic. If that seems obvious, it is because it is! But it also seems obvious that it would not be enough to reduce the displacement or the number of cylinders without considering the loss of power. After all, the bill is simple: cars would have to deliver the same or more, with greater efficiency, that is, less consumption and emissions.
+
+The solution found is an old favorite of enthusiasts, forced induction, through a turbocharger. Turbo engines have been around for a long time, and have always been used to increase the performance of vehicles with relatively small engines. Each engine admits a certain amount of air and fuel to work, and the force of the explosion of the mixture of the two is that generates the power that goes to the wheels. The more air is admitted, the more fuel is needed, and the greater this combination, the stronger the explosion.
+
+### figure 3
+```{r , echo=FALSE}
+ggplot(data = carinfo, aes(x = Year, y = Engine.Cylinders)) + 
+  #geom_point(color='black') +
+  geom_smooth(method = "lm", se = TRUE)
+ggplot(data = carinfo, aes(x = Year, y = Engine.HP)) + 
+  #geom_point(color='black') +
+  geom_smooth(method = "lm", se = TRUE)
+```
+
+## 2.3 Analyzing the SUV trend
+
+In just six months (in the first half of 2020) the segment of SUVs (SUVs) gained an additional 2.9 percentage points of participation in the total market for cars and light commercial vehicles. The growth of this segment has been noticeable for some years now and as the launches have not been exhausted, the trend is that SUVs will soon become the market leader in Brazil.
+
+SUVs have 24.6% of the market, with 187.9 thousand units sold until June and for the time being they are surpassed only by small hatches, which historically form the segment that sells the most. Small hatchbacks sold 200,435 units in the first half and had a 26.3% share, just 1.7 percentage points more than SUVs. But the hatch retracts (the segment lost 1.5 pp this year),) in the semester, the SUV grows.
+
+Only this year were launched several models in the segment, the Nívus, from Volkswagen, the Tracker, from GM, in addition to the Territory, which Ford will present to the public on the 7th of August. Caoa Chery will launch the Tiggo 8 in August and the Land Rover Defender will arrive in Brazil later this year, while Fiat announces the launch of two models in this segment in early 2021.
+
+The two together - small hatch and SUV - represent more than half of total sales, exactly 50.9%. The other 16 segments, therefore, together have 49.1%.
+
+The largest of these are the entry car, with 10.5% of sales, and the large pickup truck, with 9%. Next came the small sedan (7.4%) and compact sedan (7.1%) segment.
+
+### figure 4
+```{r , echo=FALSE}
+SUVdata <- filter(carinfo, Vehicle.Style == "4dr SUV")
+nrow(SUVdata)
+ggplot(data = SUVdata, aes(x = Year, y = Popularity)) + 
+  #geom_point(color='black') +
+  geom_smooth(method = "lm", se = TRUE)
+```
+
+## 2.4 Analysing the fuel economy through the years
+
+When gasoline in the United States doubled in price, the huge pickup trucks and SUVs, which did not run even five kilometers per liter, descended from the pedestal. The new darlings in Uncle Sam's country have become the most economical automobiles like the Japanese Civic and Accord from Honda, Corolla and Camry from Toyota.
+
+The situation was further aggravated by the economic crisis of 2009 that hit the country and broke, at the time, General Motors and Chrysler. They even offered around US $ 10,000 discount on the big and heavy drinkers that stranded in their courtyards.
+
+Engineering solved part of the problem with the downsizing of the engines: the “ve-oitão” metamorphosed into six in a row, the six cylinders had cut two of them and the four cylinders became tricyclic. No reduction in performance that was maintained thanks to new technologies developed with the support of electronics. And the boxes with an increasing number of gears.
+
+There is a popular saying that American cars had eight-cylinder engines and three-speed gearboxes. Today, the engines are three cylinders coupled to eight-speed gearboxes.
+The current challenge for the entire automotive industry worldwide is the low-consumption, low-emission car, without compromising performance, comfort and safety.
+
+### figure 5
+```{r , echo=FALSE}
+ggplot(data = carinfo, aes(x = Year, y = (city.mpg + highway.MPG)/2)) + 
+  #geom_point(color='black') +
+  geom_smooth(method = "lm", se = TRUE)
+
+```
+
+ correlation between transmission and fuel economy
+ 
+### figures 6 and 7 
+```{r , echo=FALSE}
+ggplot(data = carinfo, aes(x = (city.mpg + highway.MPG)/2, y = Transmission.Type)) + 
+  #geom_point(color='black') +
+  geom_smooth(method = "lm", se = TRUE)
+ggplot(data = carinfo, aes(x = Year, y = Transmission.Type)) + 
+  #geom_point(color='black') +
+  geom_smooth(method = "lm", se = TRUE)
+```
+
+## 2.5 Popularity and access to cars
+
+Between 2008 and 2018, a total of 28.6 million cars and 13.7 million motorcycles were added to the Brazilian fleet. This is what the Map of Individual Motorization in Brazil 2019 points out, carried out by the Observatório das Metrópoles.
+
+According to the Report, which aims to present the evolution of the fleet of motor vehicles (automobiles and motorcycles) in Brazil in the period 2008-2018, individual motorization is understood as the process resulting from the dominant presence of individual motorized means of transport over the others.
+
+Car fleet
+Data from the study show that between 2008 and 2018 the total number of automobiles in Brazil went from 37.1 million to 65.7 million, with the seventeen main metropolitan regions being responsible for 40% of this growth. Thus, "the cities that face the worst traffic and transportation problems continue to receive a good part of the load of new cars that have come to populate the streets in recent years". The study points out that considering only the year 2018, the growth in the number of automobiles was of the order of 3.7%, the smallest annual variation in the entire historical series, well below the 8.1% in 2009, the year in which there was the greatest growth within the historical series considered.
+
+According to the Report, the motorization rate (defined by the total number of cars divided by one hundred inhabitants) went from 19.6 to 31.5 in Brazil and from 26.1 to 38.3 in metropolitan regions between the years analyzed.
+
+As for regions, in the analyzed period, the greatest absolute growth in the number of automobiles occurred in the Southeast, going from 21 million to 35.2 million. The motorization rate in the region is over 26.2 cars / 100 inhabitants. for 40.1 cars / 100 inhab. However, the highest percentage growth occurred in the North, which went from just over one million cars to more than 2.3 million, representing an increase of 116%.
+
+### figures 8 and 9
+```{r , echo=FALSE}
+hist(carinfo$Popularity, freq=TRUE, col="black", border="white", 
+     main="Popularity", xlab="hp", ylab="Units")
+
+ggplot(data = carinfo, aes(x = Year, y = Popularity)) + 
+  #geom_point(color='black') +
+  geom_smooth(method = "lm", se = TRUE)
+median(carinfo$Popularity)
+mad(carinfo$Popularity)
+mean(carinfo$Popularity)
+```
+
+
+## 2.6 Retail price trend 
+
+The escalation in the prices of zero km cars in Brazil in recent years has made the entry models approaching increasingly higher values.
+
+And whoever thinks it is too expensive, know that the situation tends to get worse. This is what a study by IHS Markit reveals at ABPLAN 2020 - Automotive Planning Workshop, recently held in São Paulo.
+
+According to the company's data, the average price of vehicles in the Brazilian market will rise in the coming years, reaching BRL 85 thousand three years from now, or BRL 10,000 more than the current average.
+
+Between 2013 and 2018 the values of automobiles in the country grew close to 20% above inflation, reveals the IHS Markit. This increase is due to several factors. He cites the increase in demand for cars with automatic transmission, the requirement for more safety equipment, such as ABS brakes and front airbags, and the end of tax incentives.
+
+### figures 10, 11 e 12
+```{r , echo=FALSE}
+ggplot(data = carinfo, aes(x = Year, y = MSRP)) + 
+  #geom_point(color='black') +
+  geom_smooth(method = "lm", se = TRUE)
+ggplot(data = carinfo, aes(x = MSRP, y = Driven_Wheels)) + 
+  #geom_point(color='black') +
+  geom_smooth(method = "lm", se = TRUE) #PRECO PELA TRACAO
+ggplot(data = carinfo, aes(x = Number.of.Doors, y = MSRP)) + 
+  #geom_point(color='black') +
+  geom_smooth(method = "lm", se = TRUE) #Price by the no doors
+```
+
+# 3 Results, conclusions and future trend.
+
+The analysis methods used to refine the dataset were incisive to project the trends of the American market to other mecha, such as that of South America.
+These results are perfectly aligned with research work carried out by foreign institutes for mobility research.
+Although it shows a very good estimate of how the market has been behaving as the automakers expand their products, each domestic market is different and behaves according to the cultural and demographic characteristics of its population, so it is worth noting this limitation of this study.
+
+Automotive companies were hit hard by the economic crisis in their performance in Brazil, even though in the world this industry is among the exponents in relation to innovations. In times of scarcity, keeping up with changes in consumer demands becomes even more fundamental. Several sectors are being transformed by new technologies, sustainability policies and sharing practices; and it’s no different with automakers. Digitization, increased automation and new business models are revolutionizing the market.
+
+These forces have brought about technological and disruptive trends in the automotive sector, such as diversified mobility, autonomous driving, electrification and connectivity. The changes will make the industry totally different in 10 or 15 years. Here there are eight possible scenarios for this market, with key prospects for 2030. The changes that are underway will affect automakers, suppliers, regulators, consumers and the value chain.
+
+Knowledge of forecasts is important for the industry to prepare for the future.:
+
+1. New source of revenue
+Driven by shared mobility, connectivity services and resource updates, new business models can expand the automotive sector's revenues by about 30%, adding $ 1.5 trillion to the market. This growth will not be directly related to the sale of cars themselves, but to the provision of on-demand mobility services and data-based services.
+
+The connectivity and autonomy of the cars will allow passengers and drivers to use their time in transit to consume media and services or engage in other activities that do not require attention behind the wheel. The growth in the speed of innovation specifically in software-based systems will demand improvements in automobiles. Vehicle sharing solutions will ensure that consumers are always up-to-date on technological innovations, impacting private car sales as well.
+
+2. Growth in car sales
+Despite the expansion of the shared economy, unit vehicle sales will continue to grow, albeit at lower levels - at 2% per year, on average, in 2030. In the past five years, this index has been around 3.6% per year. The decline is due both to macroeconomic factors and the emergence of new mobility services.
+
+The growth in vehicle sharing will lead to a drop in sales of private cars, but the new service itself will account for the acquisition of many new products, as it will require constant replacement due to high usage. The index will remain positive also in the face of the arrival of more global consumers to the Middle Class in emerging economies, such as China.
+
+3. Behavioral changes
+Consumer behavior is changing in such a way that McKinsey predicts that more than a tenth of the cars sold in 2030 will already be allocated to sharing services. People, day by day, fail to value the property itself for the sake of use, especially in developed countries, such as those in Europe. With this, the traditional model of car sales will be complemented by a great diversity of mobility solutions on demand, especially in dense urban environments.
+
+If individuals today use their vehicles whether they are commuting to work or the destination is the family beach, the forecast points out that consumers will want to choose the best solution for each of these situations, accessing their smartphone. Signs of this movement are found in the 71% drop in driver's licenses issued to young people aged 16 to 24 years, in the United States, between the years 2000 and 2013. In contrast, in the last five years, there was a 30% growth in the car sharing in North America and Germany.
+
+4. Different scenarios for each city
+Seeing future business opportunities will depend, more than ever, on an analysis and segmentation of the market in each city. It will be essential to take into account population density, economic development, politics and regulation so that the industry can find the menu of mobile solutions to be offered in each location.
+
